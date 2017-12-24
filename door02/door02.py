@@ -3,4 +3,15 @@ r = []
 for row in a:
     r.append(max(row) - min(row))
 
-print(sum(r))
+#print(sum(r))
+
+b = [[5,9,2,8],[9,4,7,3],[3,8,6,5]]
+
+r2 = []
+for row in a:
+    for i in range(0, len(row)):
+        for j in range(0, len(row)):
+            if (not(row[i] == row[j])):
+                if (row[i] % row[j] == 0):
+                    r2.append(int(row[i]/row[j]))
+print(sum(r2))
