@@ -19,4 +19,26 @@ def count_cycles(bank = b):
             return cycle
         prev_states.add(str(bank))
 
+def count_same_cycle(bank = b):
+    cycle = 0
+    prev_states = set()
+    prev_states.add(str(bank))
+    loop = False
+    while (1):
+        cycle += 1
+        t = max(bank)
+        t_i = bank.index(max(bank))
+        bank[t_i] = 0
+        while (t > 0):
+            t_i += 1
+            t_i = t_i % len(bank)
+            bank[t_i] += 1
+            t -= 1
+        if (str(bank) in prev_states and not loop):
+            loop = True
+        if (str(bank) in prev_states and loop):
+            return cycle
+        prev_states.add(str(bank))
+
 print(count_cycles(b))
+print(count_same_cycle(b))
