@@ -6,7 +6,6 @@ def getHood(x,y):
     return a[x-1,y-1]+a[x,y-1]+a[x-1,y]+a[x-1,y+1]+a[x+1,y-1]+a[x+1,y]+a[x,y+1]+a[x+1,y+1]
 
 def main():
-    normal = 50
     straight_steps = 1
     x = 5
     y = 5
