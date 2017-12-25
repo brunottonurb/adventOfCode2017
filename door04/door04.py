@@ -7,3 +7,13 @@ with open('data') as f:
             s += 1
 
 print(s)
+
+with open('data') as f:
+    s = 0
+    phrases = f.readlines()
+    valid = 0
+    for phrase in phrases:
+        phrase = phrase.split()
+        if (len(set(map(lambda x: ''.join(sorted(x)), phrase))) == len(phrase)):
+            valid += 1
+    print(valid)
