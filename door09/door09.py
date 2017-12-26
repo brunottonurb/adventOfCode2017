@@ -4,8 +4,17 @@ def magic_score(data):
     group_value = 0
     total_score = 0
     is_garbage = False
+
+    garbage_counter = 0
+
     i = 0
     while (i < l):
+
+        # do the garbage counting
+        if (is_garbage == True):
+            if (data[i] != '!' and data[i] != '>'):
+                garbage_counter += 1
+
         if (data[i] == '!'):
             i += 2
             continue
@@ -28,6 +37,7 @@ def magic_score(data):
                 i += 1
                 continue
         i += 1
+    print(garbage_counter)
     return total_score
 
 
