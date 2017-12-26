@@ -5,7 +5,10 @@ class node(object):
         self.weight = 0
 
     def __str__(self, level=0):
-        ret = "  |  "*level+repr(self.value)+":"+repr(self.weight)+"\n"
+        intend = ''
+        if level>0:
+            intend = "  |--"
+        ret = "  |  "*(level-1)+intend+repr(self.value)+":"+str(self.getWeight())+"\n"
         for child in self.children:
             ret += child.__str__(level+1)
         return ret
@@ -19,18 +22,26 @@ class node(object):
         c = list(filter(lambda x: x.search(value), self.children))
         if (len(c) > 0):
             return c[0].search(value)
-        return None
+
+    def getWeight(self):
+        w = self.weight
+        for child in self.children:
+            w += child.getWeight()
+        return w
+
 
 def door07(data):
     root = node('bqyqwn')
+    #root = node('fwft')
     root.weight = 68
+    #root.weight = 72
     for x in ['wscqe', 'cwxspl', 'syogw', 'xnxudsh']:
+    #for x in ['ktlj', 'cntj', 'xhth']:
         root.children.append(node(x))
 
     with open(data) as f:
         l = f.readlines()
         l = list(l)
-        # = []
         while (len(l) > 0):
             for st in l:
                 s = st.split()
@@ -38,73 +49,46 @@ def door07(data):
                 weight = int(s[1][1:-1]); #print(weight)
                 children = []
                 if (len(s) > 2):
-                    #children = s[3:]
                     for child in s[3:-1]:
                         children.append(child[:-1])
                     children.append(s[-1])
-                # print(children)
                 location = root.search(name)
                 if (location):
                     for child in children:
                         location.children.append(node(child))
                     location.weight = weight
-                    #print('inserted above')
                     l.remove(st)
                 elif (root.value in children):
-                    #print("inserted as root")
                     new = node(name)
+                    new.weight = weight
                     for child in children:
                         new.children.append(node(child))
                     location = new.search(root.value)
+                    location.weight = root.weight
                     location.children = root.children
                     root = new
                     l.remove(st)
 
-        print(root)
-        #print(later)
+        return root
 
-door07('data')
+def door072(o):
+    #recursive baby! yeah baby!
+    if (len(o.children) > 0):
+        if (len(set(map(lambda x: x.getWeight(), o.children))) > 1):
+            print(o.value)
+            print('\n--------------------\n')
+        for child in o.children:
+            door072(child)
 
-def comment2():
-    root = node('bqyqwn')
-    root.weight = 68
-    for x in ['wscqe', 'cwxspl', 'syogw', 'xnxudsh']:
-        root.children.append(node(x))
-    #door07('data')
-    with open('test') as f:
-        l = f.readlines()
-        for s in l:
-            s = s.split()
-            name = s[0]; #print(name)
-            weight = int(s[1][1:-1]); #print(weight)
-            children = []
-            if (len(s) > 2):
-                #children = s[3:]
-                for child in s[3:-1]:
-                    children.append(child[:-1])
-                children.append(s[-1])
-            print(children)
-            #print(children.index(root.value))
-            print(children[0])
-            print(root.value)
-            print(root.value == children[0])
+r = door07('data')
+#r = door07('test')
+print(r)
+door072(r)
 
+n = r.search('gozhrsf')
+print(n.value+':\t'+str(n.weight))
+print(n)
+for n in n.children:
+    print(n.value+':\t'+str(n.getWeight()))
 
-#"bqyqwn (68) -> wscqe, cwxspl, syogw, xnxudsh"
-def comment():
-    root = node('1')
-    n = node('2')
-    m = node('3')
-    o = node('4')
-    p = node('5')
-
-    o.weight = 2
-
-    o.children = [p]
-    n.children = [o,m]
-    root.children = [n]
-
-    new = node('here')
-    new.children.append(root)
-    root = new
-    print(root)
+print(762-5)
