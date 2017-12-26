@@ -1,6 +1,7 @@
 registers = dict()
 with open('data') as f:
     l = f.readlines()
+    m = 0
     for s in l:
         s = s.split()
 
@@ -67,4 +68,7 @@ with open('data') as f:
         else:
             print(condition)
 
+        m = max(max(registers.values()), m)
+
     print(max(zip(registers.values(), registers.keys())))
+    print(m)
