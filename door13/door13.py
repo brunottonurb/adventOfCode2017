@@ -1,4 +1,4 @@
-def calc_severity(data):
+def calc_severity(data, delay):
     with open(data) as f:
         l = f.readlines()
         layers = {}
@@ -9,13 +9,27 @@ def calc_severity(data):
             backup[int(i[0].strip(':'))] = int(i[1])
 
         severity = 0
-        for pico in range(0, 100):
+        pico = 0
+        caught = False
+        while True:
             if (pico in layers):
-                print(str(pico)+':'+str(pico % layers[pico])+'/'+str(layers[pico]))
-                if (pico % layers[pico] == 0):
+                # print(str(pico+delay)+':'+str((pico+delay) % layers[pico])+'/'+str(backup[pico]))
+                if ((pico+delay) % layers[pico] == 0):
                     severity += pico * backup[pico]
-        print(severity)
+                    caught = True
+            if (pico >= max(layers.keys())):
+                break
+            pico += 1
+        return (caught, severity)
 
-calc_severity('data')
+#calc_severity('data', 0)
 
-print
+delay = 0
+while True:
+    caught, sev = calc_severity('data', delay)
+    print('delay = '+str(delay)+'\tseverity = '+str(sev))
+    if not caught:
+        break
+    delay += 1
+
+print(delay)

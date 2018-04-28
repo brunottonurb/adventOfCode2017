@@ -1,21 +1,28 @@
-from time import sleep
+from copy import deepcopy
 
-def get_groups(data, c):
-    group = set(c)
+def get_groups(data):
+    groups = []
     with open(data) as f:
         l = f.readlines()
-        lines = list(map(lambda x: x.replace('<->','').replace(',','').split(), l))
-        while True:
-            old_len = len(group)
-            for line in lines:
-                for item in line:
-                    if item in group:
-                        for item in line:
-                            group.add(item)
-                        break
-            if (old_len == len(group)):
+        groups = list(map(lambda x: set(x.replace('<->','').replace(',','').split()), l))
+        c = 0
+        while c < 100:
+            newGroups = []
+            for group in groups:
+                for otherGroup in groups:
+                    if (len(group & otherGroup) > 0):
+                        newGroups.append(group | otherGroup)
+            if (newGroups == groups):
                 break
-    return group
+            groups = newGroups
+            print(c)
+            c += 1
 
-g = get_groups('data', '0')
+
+    return groups
+
+g = get_groups('data')
+for j in g:
+    if '0' in j:
+        print(len(j))
 print(len(g))
